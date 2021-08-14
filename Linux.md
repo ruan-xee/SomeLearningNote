@@ -164,8 +164,6 @@
 
 - #### 在我们Linux系统当中，默认的情况下，所有的系统上的帐号与一般身份使用者，还有那个root的相关信息， 都是记录在/etc/passwd这个文件内的。至于个人的密码则是记录 在/etc/shadow这个文件下。此外，Linux所有的群组名称都纪录在/etc/group内！这三个文件可以说是Linux系统里面账号、密码、群组信息的集中地啰！ 不要随便删除这三个文件啊！
 
-
-
 ```bash
 [root@study ~]# ls -al
 total 48
@@ -183,32 +181,39 @@ drwx------. 3 root root 24 May 4 17:59 .dbus
 [权限]    [链接][拥有者][群组][文件大小][ 修改日期 ] [ 文件名 ]
 ```
 
-#### 第一栏代表这个文件的类型及权限
+- #### 第一栏代表这个文件的类型及权限
+
 
 ​		-rwxrwx---
 ​		第一位为文件类型，[d]为目录；[-]为文件；[l]为链接文件；[b]为设备文件里面的可供储存的周边设备（可随机存取设		备）；[c]为设备文件里面的序列埠设备，例如键盘、鼠标（一次性读取设备）
 ​		接下来每三个为一组，第一组为文件拥有者可具备的权限，第二组为“加入此群组之帐号的权限”，第三组为“非本人且		没有加入本群组之其他帐号的权限”
 ​		且每一组内的三个位置所对应的权限也不会改变，第一个位置为[r]可读，第二个位置为[w]可写，第三个位置为[x]可		执行，如果没有对应的权限，则该位置显示[-]
 
-#### 第二栏表示有多少文件名链接到此节点（i-node）
+- #### 第二栏表示有多少文件名链接到此节点（i-node）
 
-#### 第三栏表示这个文件（或目录）的拥有者账号
 
-#### 第四栏表示这个文件的所属群组
+- #### 第三栏表示这个文件（或目录）的拥有者账号
 
-#### 第五栏表示这个文件的容量大小，默认单位为Bytes
 
-#### 第六栏表示这个文件的创建日期或是最近的修改日期
+- #### 第四栏表示这个文件的所属群组
+
+
+- #### 第五栏表示这个文件的容量大小，默认单位为Bytes
+
+
+- #### 第六栏表示这个文件的创建日期或是最近的修改日期
+
 
 ​		这一栏的显示时间格式一般为“月 日 时:分”，但如果时间太久远，则会变为“月 日 年”，“ls -l --full-time”就能显示完整		的时间格式了，包括年月日时分。
 
-#### 第七栏为这个文件的文件名
+- #### 第七栏为这个文件的文件名
+
 
 ​		比较特殊的是如果文件名前多一个“.”符号，则表示该文件为隐藏文件，通过“ls”命令不能查看隐藏文件，通过“ls -a”则		可以显示出隐藏文件。
 
 
 
-- #### 改变所属组群 chgrp
+#### 改变所属组群 chgrp
 
 ```bash
 [root@study ~]# chgrp [-R] dirname/filename ...
@@ -223,7 +228,7 @@ drwx------. 3 root root 24 May 4 17:59 .dbus
 chgrp: invalid group: `testing' <== 发生错误讯息啰～找不到这个群组名～
 ```
 
-- #### 改变所属拥有者chown
+#### 改变所属拥有者chown
 
 ```bash
 [root@study ~]# chown [-R] 帐号名称 文件或目录
@@ -242,7 +247,7 @@ chgrp: invalid group: `testing' <== 发生错误讯息啰～找不到这个群�
 
 ​		chown也可以使用“chown user.group file”，亦即在拥有者与群组间加上小数点“ . ”也行！此外，chown也能单纯的修		改所属群组呢！例如“chown .sshd initial-setup-ks.cfg”就是修改群组！
 
-- #### 改变权限chmod
+#### 改变权限chmod
 
 - 数字类型改变文件权限
 
@@ -287,164 +292,166 @@ xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的
 
 #### 文件权限概念
 
-##### 对文件的权限概念
+- ##### 对文件的权限概念
+
 
 - r：读到该文件内容
 - w：对该文件内容进行修改
 - x：执行文件内容
 
-##### 对文件夹的权限概念
+- ##### 对文件夹的权限概念
+
 
 - r：读到该文件夹下的文件列表
 - w：变动该文件夹中的内容（创建、删除、更名、复制、剪切）
 - x：进入该文件夹的权限
 
-##### 当文件夹没有x权限时，不能进入该文件夹，即“cd”进入该文件夹命名将反馈失败，无权限；
+- ##### 当文件夹没有x权限时，不能进入该文件夹，即“cd”进入该文件夹命名将反馈失败，无权限；
 
-##### 当文件夹没有x权限有r权限时，可列出文件夹下的文件列表，但没有详细信息，且无法进入文件夹；
 
-##### 当文件夹有w权限时，无论其中的文件的权限是何，都有删除其中任一文件的权限，所有不要轻易对文件夹赋予w权限；
+- ##### 当文件夹没有x权限有r权限时，可列出文件夹下的文件列表，但没有详细信息，且无法进入文件夹；
 
-##### 当文件夹有x权限没有r权限时，能进入该文件夹，但无法罗列出其中的文件列表，需要对文件夹内部文件结构了解。
+
+- ##### 当文件夹有w权限时，无论其中的文件的权限是何，都有删除其中任一文件的权限，所有不要轻易对文件夹赋予w权限；
+
+
+- ##### 当文件夹有x权限没有r权限时，能进入该文件夹，但无法罗列出其中的文件列表，需要对文件夹内部文件结构了解。
+
 
 
 
 # 6.Linux文件与目录管理
 
-- #### 目录的相关操作
+#### 目录的相关操作
 
-  ##### 	. 代表此层目录
+. 代表此层目录
 
-  ##### 	.. 代表上一层目录
+.. 代表上一层目录
 
-  ##### 	-代表前一个工作目录
+-代表前一个工作目录
 
-  ##### 	~代表“目前使用者身份”所在的主文件夹
+~代表“目前使用者身份”所在的主文件夹
 
-  ##### 	~account 代表 account 这个使用者的主文件夹（account是个帐号名称）
+~account 代表 account 这个使用者的主文件夹（account是个帐号名称）
 
-- #### 常见的处理目录指令
+#### 常见的处理目录指令
 
-  ##### 1.cd：变换目录
+- ##### cd：变换目录
 
-  ```bash
-  [dmtsai@study ~]$ su - # 先切换身份成为 root 看看！
-  [root@study ~]# cd [相对路径或绝对路径]
-  # 最重要的就是目录的绝对路径与相对路径，还有一些特殊目录的符号啰！
-  [root@study ~]# cd ~dmtsai
-  # 代表去到 dmtsai 这个使用者的主文件夹，亦即 /home/dmtsai
-  [root@study dmtsai]# cd ~
-  # 表示回到自己的主文件夹，亦即是 /root 这个目录
-  [root@study ~]# cd
-  # 没有加上任何路径，也还是代表回到自己主文件夹的意思喔！
-  [root@study ~]# cd ..
-  # 表示去到目前的上层目录，亦即是 /root 的上层目录的意思；
-  [root@study /]# cd -
-  # 表示回到刚刚的那个目录，也就是 /root 啰～
-  [root@study ~]# cd /var/spool/mail
-  # 这个就是绝对路径的写法！直接指定要去的完整路径名称！
-  [root@study mail]# cd ../postfix
-  # 这个是相对路径的写法，我们由/var/spool/mail 去到/var/spool/postfix 就这样写！
-  ```
 
-  
+```bash
+[dmtsai@study ~]$ su - # 先切换身份成为 root 看看！
+[root@study ~]# cd [相对路径或绝对路径]
+# 最重要的就是目录的绝对路径与相对路径，还有一些特殊目录的符号啰！
+[root@study ~]# cd ~dmtsai
+# 代表去到 dmtsai 这个使用者的主文件夹，亦即 /home/dmtsai
+[root@study dmtsai]# cd ~
+# 表示回到自己的主文件夹，亦即是 /root 这个目录
+[root@study ~]# cd
+# 没有加上任何路径，也还是代表回到自己主文件夹的意思喔！
+[root@study ~]# cd ..
+# 表示去到目前的上层目录，亦即是 /root 的上层目录的意思；
+[root@study /]# cd -
+# 表示回到刚刚的那个目录，也就是 /root 啰～
+[root@study ~]# cd /var/spool/mail
+# 这个就是绝对路径的写法！直接指定要去的完整路径名称！
+[root@study mail]# cd ../postfix
+# 这个是相对路径的写法，我们由/var/spool/mail 去到/var/spool/postfix 就这样写！
+```
 
-  ##### 2.pwd：显示目前所在的目录
+- ##### pwd：显示目前所在的目录
 
-  ```bash
-  [root@study ~]# pwd [-P]
-  选项与参数：
-  -P ：显示出确实的路径，而非使用链接 （link） 路径。
-  范例：单纯显示出目前的工作目录：
-  [root@study ~]# pwd
-  /root <== 显示出目录啦～
-  范例：显示出实际的工作目录，而非链接文件本身的目录名而已
-  [root@study ~]# cd /var/mail <==注意，/var/mail是一个链接文件
-  [root@study mail]# pwd
-  /var/mail <==列出目前的工作目录
-  [root@study mail]# pwd -P
-  /var/spool/mail <==怎么回事？有没有加 -P 差很多～
-  [root@study mail]# ls -ld /var/mail
-  lrwxrwxrwx. 1 root root 10 May 4 17:51 /var/mail -&gt; spool/mail
-  # 看到这里应该知道为啥了吧？因为 /var/mail 是链接文件，链接到 /var/spool/mail
-  # 所以，加上 pwd -P 的选项后，会不以链接文件的数据显示，而是显示正确的完整路径啊！
-  ```
 
-  
+```bash
+[root@study ~]# pwd [-P]
+选项与参数：
+-P ：显示出确实的路径，而非使用链接 （link） 路径。
+范例：单纯显示出目前的工作目录：
+[root@study ~]# pwd
+/root <== 显示出目录啦～
+范例：显示出实际的工作目录，而非链接文件本身的目录名而已
+[root@study ~]# cd /var/mail <==注意，/var/mail是一个链接文件
+[root@study mail]# pwd
+/var/mail <==列出目前的工作目录
+[root@study mail]# pwd -P
+/var/spool/mail <==怎么回事？有没有加 -P 差很多～
+[root@study mail]# ls -ld /var/mail
+lrwxrwxrwx. 1 root root 10 May 4 17:51 /var/mail -&gt; spool/mail
+# 看到这里应该知道为啥了吧？因为 /var/mail 是链接文件，链接到 /var/spool/mail
+# 所以，加上 pwd -P 的选项后，会不以链接文件的数据显示，而是显示正确的完整路径啊！
+```
 
-  ##### 3.mkdir：创建新目录
+- ##### mkdir：创建新目录
 
-  ```bash
-  [root@study ~]# mkdir [-mp] 目录名称
-  选项与参数：
-  -m ：设置文件的权限喔！直接设置，不需要看默认权限 （umask） 的脸色～
-  -p ：帮助你直接将所需要的目录（包含上层目录）递回创建起来！
-  范例：请到/tmp下面尝试创建数个新目录看看：
-  [root@study ~]# cd /tmp
-  [root@study tmp]# mkdir test <==创建一名为 test 的新目录
-  [root@study tmp]# mkdir test1/test2/test3/test4
-  mkdir: cannot create directory ‘test1/test2/test3/test4’: No such file or directory
-  # 话说，系统告诉我们，没可能创建这个目录啊！就是没有目录才要创建的！见鬼嘛？
-  [root@study tmp]# mkdir -p test1/test2/test3/test4
-  # 原来是要建 test4 上层没先建 test3 之故！加了这个 -p 的选项，可以自行帮你创建多层目录！
-  范例：创建权限为rwx--x--x的目录
-  [root@study tmp]# mkdir -m 711 test2
-  [root@study tmp]# ls -ld test*
-  drwxr-xr-x. 2 root root 6 Jun 4 19:03 test
-  drwxr-xr-x. 3 root root 18 Jun 4 19:04 test1
-  drwx--x--x. 2 root root 6 Jun 4 19:05 test2
-  # 仔细看上面的权限部分，如果没有加上 -m 来强制设置属性，系统会使用默认属性。
-  # 那么你的默认属性为何？这要通过下面介绍的 [umask](../Text/index.html#umask) 才能了解喔！ ^_^
-  ```
 
-  
+```bash
+[root@study ~]# mkdir [-mp] 目录名称
+选项与参数：
+-m ：设置文件的权限喔！直接设置，不需要看默认权限 （umask） 的脸色～
+-p ：帮助你直接将所需要的目录（包含上层目录）递回创建起来！
+范例：请到/tmp下面尝试创建数个新目录看看：
+[root@study ~]# cd /tmp
+[root@study tmp]# mkdir test <==创建一名为 test 的新目录
+[root@study tmp]# mkdir test1/test2/test3/test4
+mkdir: cannot create directory ‘test1/test2/test3/test4’: No such file or directory
+# 话说，系统告诉我们，没可能创建这个目录啊！就是没有目录才要创建的！见鬼嘛？
+[root@study tmp]# mkdir -p test1/test2/test3/test4
+# 原来是要建 test4 上层没先建 test3 之故！加了这个 -p 的选项，可以自行帮你创建多层目录！
+范例：创建权限为rwx--x--x的目录
+[root@study tmp]# mkdir -m 711 test2
+[root@study tmp]# ls -ld test*
+drwxr-xr-x. 2 root root 6 Jun 4 19:03 test
+drwxr-xr-x. 3 root root 18 Jun 4 19:04 test1
+drwx--x--x. 2 root root 6 Jun 4 19:05 test2
+# 仔细看上面的权限部分，如果没有加上 -m 来强制设置属性，系统会使用默认属性。
+# 那么你的默认属性为何？这要通过下面介绍的 [umask](../Text/index.html#umask) 才能了解喔！ ^_^
+```
 
-  ##### 4.rmdir：删除空目录
+- ##### rmdir：删除空目录
 
-  ```bash
-  [root@study ~]# rmdir [-p] 目录名称
-  选项与参数：
-  -p ：连同“上层”“空的”目录也一起删除
-  范例：将于mkdir范例中创建的目录（/tmp下面）删除掉！
-  [root@study tmp]# ls -ld test* <==看看有多少目录存在？
-  drwxr-xr-x. 2 root root 6 Jun 4 19:03 test
-  drwxr-xr-x. 3 root root 18 Jun 4 19:04 test1
-  drwx--x--x. 2 root root 6 Jun 4 19:05 test2
-  [root@study tmp]# rmdir test <==可直接删除掉，没问题
-  [root@study tmp]# rmdir test1 <==因为尚有内容，所以无法删除！
-  rmdir: failed to remove ‘test1’: Directory not empty
-  [root@study tmp]# rmdir -p test1/test2/test3/test4
-  [root@study tmp]# ls -ld test* <==您看看，下面的输出中test与test1不见了！
-  drwx--x--x. 2 root root 6 Jun 4 19:05 test2
-  # 瞧！利用 -p 这个选项，立刻就可以将 test1/test2/test3/test4 一次删除～
-  # 不过要注意的是，这个 rmdir 仅能“删除空的目录”喔！
-  ```
 
-  
+```bash
+[root@study ~]# rmdir [-p] 目录名称
+选项与参数：
+-p ：连同“上层”“空的”目录也一起删除
+范例：将于mkdir范例中创建的目录（/tmp下面）删除掉！
+[root@study tmp]# ls -ld test* <==看看有多少目录存在？
+drwxr-xr-x. 2 root root 6 Jun 4 19:03 test
+drwxr-xr-x. 3 root root 18 Jun 4 19:04 test1
+drwx--x--x. 2 root root 6 Jun 4 19:05 test2
+[root@study tmp]# rmdir test <==可直接删除掉，没问题
+[root@study tmp]# rmdir test1 <==因为尚有内容，所以无法删除！
+rmdir: failed to remove ‘test1’: Directory not empty
+[root@study tmp]# rmdir -p test1/test2/test3/test4
+[root@study tmp]# ls -ld test* <==您看看，下面的输出中test与test1不见了！
+drwx--x--x. 2 root root 6 Jun 4 19:05 test2
+# 瞧！利用 -p 这个选项，立刻就可以将 test1/test2/test3/test4 一次删除～
+# 不过要注意的是，这个 rmdir 仅能“删除空的目录”喔！
+```
 
-  - ##### 将ls指令文件从bin中移动到root文件夹中（务必先切换至root身份）：
+- ##### 将ls指令文件从bin中移动到root文件夹中（务必先切换至root身份）：
 
-  ```bash
-  [root@study ~]# mv /bin/ls /root
-  # mv 为移动，可将文件在不同的目录间进行移动作业
-  ```
+```bash
+[root@study ~]# mv /bin/ls /root
+# mv 为移动，可将文件在不同的目录间进行移动作业
+```
 
-  - ##### 因为这个ls确实存在于/root下面，并不是被删除了！所以我们可以通过使用绝对路径或 者是相对路径直接指定这个可执行文件文件名， 下面的两个方法都能够执行ls这个指令：
+- ##### 因为这个ls确实存在于/root下面，并不是被删除了！所以我们可以通过使用绝对路径或 者是相对路径直接指定这个可执行文件文件名， 下面的两个方法都能够执行ls这个指令：
 
-  ```bash
-  [root@study ~]# /root/ls <==直接用绝对路径指定该文件名
-  [root@study ~]# ./ls <==因为在 /root 目录下，就用./ls来指定
-  ```
+```bash
+[root@study ~]# /root/ls <==直接用绝对路径指定该文件名
+[root@study ~]# ./ls <==因为在 /root 目录下，就用./ls来指定
+```
 
-  - ##### 如果想要让root在任何目录均可执行/root下面的ls，那么就将/root加入PATH当中即可：
+- ##### 如果想要让root在任何目录均可执行/root下面的ls，那么就将/root加入PATH当中即可：
 
-  ```bash
-  [root@study ~]# PATH="${PATH}:/root"
-  ```
+```bash
+[root@study ~]# PATH="${PATH}:/root"
+```
 
-  
 
-- #### 文件与目录的检视：ls
+
+#### 文件与目录的检视：ls
 
 ```bash
 [root@study ~]# ls [-aAdfFhilnrRSt] 文件名或目录名称..
@@ -473,166 +480,170 @@ xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的
 					而非内容变更时间 （modification time）
 ```
 
-- #### 复制、删除和移动：cp、rm、mv
+#### 复制、删除和移动：cp、rm、mv
 
-  ##### cp：复制文件或目录
+- ##### cp：复制文件或目录
 
-  ```bash
-  [root@study ~]# cp [-adfilprsu] 来源文件（source） 目标文件（destination）
-  [root@study ~]# cp [options] source1 source2 source3 .... directory
-  选项与参数：
-  -a ：相当于 -dr --preserve=all 的意思，至于 dr 请参考下列说明；（常用）
-  -d ：若来源文件为链接文件的属性（link file），则复制链接文件属性而非文件本身；
-  -f ：为强制（force）的意思，若目标文件已经存在且无法打开，则移除后再尝试一次；
-  -i ：若目标文件（destination）已经存在时，在覆盖时会先询问动作的进行（常用）
-  -l ：进行硬式链接（hard link）的链接文件创建，而非复制文件本身；
-  -p ：连同文件的属性（权限、用户、时间）一起复制过去，而非使用默认属性（备份常用）；
-  -r ：递回持续复制，用于目录的复制行为；（常用）
-  -s ：复制成为符号链接文件 （symbolic link），亦即“捷径”文件；
-  -u ：destination 比 source 旧才更新 destination，或 destination 不存在的情况下才复制。
-  --preserve=all ：除了 -p 的权限相关参数外，还加入 SELinux 的属性, links, xattr 等也复制了。
-  最后需要注意的，如果来源文件有两个以上，则最后一个目的文件一定要是“目录”才行！
-  ```
 
-  复制练习：
+```bash
+[root@study ~]# cp [-adfilprsu] 来源文件（source） 目标文件（destination）
+[root@study ~]# cp [options] source1 source2 source3 .... directory
+选项与参数：
+-a ：相当于 -dr --preserve=all 的意思，至于 dr 请参考下列说明；（常用）
+-d ：若来源文件为链接文件的属性（link file），则复制链接文件属性而非文件本身；
+-f ：为强制（force）的意思，若目标文件已经存在且无法打开，则移除后再尝试一次；
+-i ：若目标文件（destination）已经存在时，在覆盖时会先询问动作的进行（常用）
+-l ：进行硬式链接（hard link）的链接文件创建，而非复制文件本身；
+-p ：连同文件的属性（权限、用户、时间）一起复制过去，而非使用默认属性（备份常用）；
+-r ：递回持续复制，用于目录的复制行为；（常用）
+-s ：复制成为符号链接文件 （symbolic link），亦即“捷径”文件；
+-u ：destination 比 source 旧才更新 destination，或 destination 不存在的情况下才复制。
+--preserve=all ：除了 -p 的权限相关参数外，还加入 SELinux 的属性, links, xattr 等也复制了。
+最后需要注意的，如果来源文件有两个以上，则最后一个目的文件一定要是“目录”才行！
+```
 
-  ```bash
-  范例一：用root身份，将主文件夹下的 .bashrc 复制到 /tmp 下，并更名为 bashrc
-  [root@study ~]# cp ~/.bashrc /tmp/bashrc
-  [root@study ~]# cp -i ~/.bashrc /tmp/bashrc
-  cp: overwrite `/tmp/bashrc'? n <==n不覆盖，y为覆盖
-  # 重复作两次动作，由于 /tmp 下面已经存在 bashrc 了，加上 -i 选项后，
-  # 则在覆盖前会询问使用者是否确定！可以按下 n 或者 y 来二次确认呢！
-  范例二：变换目录到/tmp，并将/var/log/wtmp复制到/tmp且观察属性：
-  [root@study ~]# cd /tmp
-  [root@study tmp]# cp /var/log/wtmp . <==想要复制到目前的目录，最后的 . 不要忘
-  [root@study tmp]# ls -l /var/log/wtmp wtmp
-  -rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 /var/log/wtmp
-  -rw-r--r--. 1 root root 28416 Jun 11 19:01 wtmp
-  # 注意上面的特殊字体，在不加任何选项的情况下，文件的某些属性/权限会改变；
-  # 这是个很重要的特性！要注意喔！还有，连文件创建的时间也不一样了！
-  # 那如果你想要将文件的所有特性都一起复制过来该怎办？可以加上 -a 喔！如下所示：
-  [root@study tmp]# cp -a /var/log/wtmp wtmp_2
-  [root@study tmp]# ls -l /var/log/wtmp wtmp_2
-  -rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 /var/log/wtmp
-  -rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 wtmp_2
-  # 瞭了吧！整个数据特性完全一模一样ㄟ！真是不赖～这就是 -a 的特性！
-  
-  范例三：复制 /etc/ 这个目录下的所有内容到 /tmp 下面
-  [root@study tmp]# cp /etc/ /tmp
-  cp: omitting directory `/etc' <== 如果是目录则不能直接复制，要加上 -r 的选项
-  [root@study tmp]# cp -r /etc/ /tmp
-  # 还是要再次的强调喔！ -r 是可以复制目录，但是，文件与目录的权限可能会被改变
-  # 所以，也可以利用“ cp -a /etc /tmp ”来下达指令喔！尤其是在备份的情况下！
-  范例四：将范例一复制的 bashrc 创建一个链接文件 （symbolic link）
-  [root@study tmp]# ls -l bashrc
-  -rw-r--r--. 1 root root 176 Jun 11 19:01 bashrc <==先观察一下文件情况
-  [root@study tmp]# cp -s bashrc bashrc_slink
-  [root@study tmp]# cp -l bashrc bashrc_hlink
-  [root@study tmp]# ls -l bashrc*
-  -rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc <==与原始文件不太一样了！
-  -rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc_hlink
-  lrwxrwxrwx. 1 root root 6 Jun 11 19:06 bashrc_slink -> bashrc
-  
-  范例五：若 ~/.bashrc 比 /tmp/bashrc 新才复制过来
-  [root@study tmp]# cp -u ~/.bashrc /tmp/bashrc
-  # 这个 -u 的特性，是在目标文件与来源文件有差异时，才会复制的。
-  # 所以，比较常被用于“备份”的工作当中喔！ ^_^
-  范例六：将范例四造成的 bashrc_slink 复制成为 bashrc_slink_1 与bashrc_slink_2
-  [root@study tmp]# cp bashrc_slink bashrc_slink_1
-  [root@study tmp]# cp -d bashrc_slink bashrc_slink_2
-  [root@study tmp]# ls -l bashrc bashrc_slink*
-  -rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc
-  lrwxrwxrwx. 1 root root 6 Jun 11 19:06 bashrc_slink -> bashrc
-  -rw-r--r--. 1 root root 176 Jun 11 19:09 bashrc_slink_1 <==与原始文件相同
-  lrwxrwxrwx. 1 root root 6 Jun 11 19:10 bashrc_slink_2 -> bashrc <==是链接文件！
-  # 这个例子也是很有趣喔！原本复制的是链接文件，但是却将链接文件的实际文件复制过来了
-  # 也就是说，如果没有加上任何选项时，cp复制的是原始文件，而非链接文件的属性！
-  # 若要复制链接文件的属性，就得要使用 -d 的选项了！如 bashrc_slink_2 所示。
-  范例七：将主文件夹的 .bashrc 及 .bash_history 复制到 /tmp 下面
-  [root@study tmp]# cp ~/.bashrc ~/.bash_history /tmp
-  # 可以将多个数据一次复制到同一个目录去！最后面一定是目录！
-  ```
+复制练习：
 
-  ##### rm：移除文件或目录
+```bash
+范例一：用root身份，将主文件夹下的 .bashrc 复制到 /tmp 下，并更名为 bashrc
+[root@study ~]# cp ~/.bashrc /tmp/bashrc
+[root@study ~]# cp -i ~/.bashrc /tmp/bashrc
+cp: overwrite `/tmp/bashrc'? n <==n不覆盖，y为覆盖
+# 重复作两次动作，由于 /tmp 下面已经存在 bashrc 了，加上 -i 选项后，
+# 则在覆盖前会询问使用者是否确定！可以按下 n 或者 y 来二次确认呢！
+范例二：变换目录到/tmp，并将/var/log/wtmp复制到/tmp且观察属性：
+[root@study ~]# cd /tmp
+[root@study tmp]# cp /var/log/wtmp . <==想要复制到目前的目录，最后的 . 不要忘
+[root@study tmp]# ls -l /var/log/wtmp wtmp
+-rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 /var/log/wtmp
+-rw-r--r--. 1 root root 28416 Jun 11 19:01 wtmp
+# 注意上面的特殊字体，在不加任何选项的情况下，文件的某些属性/权限会改变；
+# 这是个很重要的特性！要注意喔！还有，连文件创建的时间也不一样了！
+# 那如果你想要将文件的所有特性都一起复制过来该怎办？可以加上 -a 喔！如下所示：
+[root@study tmp]# cp -a /var/log/wtmp wtmp_2
+[root@study tmp]# ls -l /var/log/wtmp wtmp_2
+-rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 /var/log/wtmp
+-rw-rw-r--. 1 root utmp 28416 Jun 11 18:56 wtmp_2
+# 瞭了吧！整个数据特性完全一模一样ㄟ！真是不赖～这就是 -a 的特性！
 
-  ```bash
-  [root@study ~]# rm [-fir] 文件或目录
-  选项与参数：
-  -f ：就是 force 的意思，忽略不存在的文件，不会出现警告讯息；
-  -i ：互动模式，在删除前会询问使用者是否动作
-  -r ：递回删除啊！最常用在目录的删除了！这是非常危险的选项！！！
-  范例一：将刚刚在 cp 的范例中创建的 bashrc 删除掉！
-  [root@study ~]# cd /tmp
-  [root@study tmp]# rm -i bashrc
-  rm: remove regular file `bashrc'? y
-  # 如果加上 -i 的选项就会主动询问喔，避免你删除到错误的文件名！
-  范例二：通过万用字符*的帮忙，将/tmp下面开头为bashrc的文件名通通删除：
-  [root@study tmp]# rm -i bashrc*
-  # 注意那个星号，代表的是 0 到无穷多个任意字符喔！很好用的东西！
-  范例三：将 cp 范例中所创建的 /tmp/etc/ 这个目录删除掉！
-  [root@study tmp]# rmdir /tmp/etc
-  rmdir: failed to remove '/tmp/etc': Directory not empty <== 删不掉啊！因为这不是空的目录！
-  [root@study tmp]# rm -r /tmp/etc
-  rm: descend into directory `/tmp/etc'? y
-  rm: remove regular file `/tmp/etc/fstab'? y
-  rm: remove regular empty file `/tmp/etc/crypttab'? ^C &lt;== 按下 [crtl]+c 中断
-  .....（中间省略）.....
-  # 因为身份是 root ，默认已经加入了 -i 的选项，所以你要一直按 y 才会删除！
-  # 如果不想要继续按 y ，可以按下“ [ctrl]-c ”来结束 rm 的工作。
-  # 这是一种保护的动作，如果确定要删除掉此目录而不要询问，可以这样做：
-  [root@study tmp]# \rm -r /tmp/etc
-  # 在指令前加上反斜线，可以忽略掉 alias 的指定选项喔！至于 alias 我们在bash再谈！
-  # 拜托！这个范例很可怕！你不要删错了！删除 /etc 系统是会挂掉的！
-  范例四：删除一个带有 - 开头的文件
-  [root@study tmp]# touch ./-aaa- <==[touch](../Text/index.html#touch)这个指令可以创建空文件！
-  [root@study tmp]# ls -l
-  -rw-r--r--. 1 root root 0 Jun 11 19:22 -aaa- <==文件大小为0，所以是空文件
-  [root@study tmp]# rm -aaarm: invalid option -- 'a' <== 因为 "-" 是选项嘛！所以系统误判了！
-  Try 'rm ./-aaa-' to remove the file `-aaa-'. <== 新的 bash 有给建议的
-  Try 'rm --help' for more information.
-  [root@study tmp]# rm ./-aaa
-  ```
+范例三：复制 /etc/ 这个目录下的所有内容到 /tmp 下面
+[root@study tmp]# cp /etc/ /tmp
+cp: omitting directory `/etc' <== 如果是目录则不能直接复制，要加上 -r 的选项
+[root@study tmp]# cp -r /etc/ /tmp
+# 还是要再次的强调喔！ -r 是可以复制目录，但是，文件与目录的权限可能会被改变
+# 所以，也可以利用“ cp -a /etc /tmp ”来下达指令喔！尤其是在备份的情况下！
+范例四：将范例一复制的 bashrc 创建一个链接文件 （symbolic link）
+[root@study tmp]# ls -l bashrc
+-rw-r--r--. 1 root root 176 Jun 11 19:01 bashrc <==先观察一下文件情况
+[root@study tmp]# cp -s bashrc bashrc_slink
+[root@study tmp]# cp -l bashrc bashrc_hlink
+[root@study tmp]# ls -l bashrc*
+-rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc <==与原始文件不太一样了！
+-rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc_hlink
+lrwxrwxrwx. 1 root root 6 Jun 11 19:06 bashrc_slink -> bashrc
 
-  ##### mv：移动文件与目录，或更名
+范例五：若 ~/.bashrc 比 /tmp/bashrc 新才复制过来
+[root@study tmp]# cp -u ~/.bashrc /tmp/bashrc
+# 这个 -u 的特性，是在目标文件与来源文件有差异时，才会复制的。
+# 所以，比较常被用于“备份”的工作当中喔！ ^_^
+范例六：将范例四造成的 bashrc_slink 复制成为 bashrc_slink_1 与bashrc_slink_2
+[root@study tmp]# cp bashrc_slink bashrc_slink_1
+[root@study tmp]# cp -d bashrc_slink bashrc_slink_2
+[root@study tmp]# ls -l bashrc bashrc_slink*
+-rw-r--r--. 2 root root 176 Jun 11 19:01 bashrc
+lrwxrwxrwx. 1 root root 6 Jun 11 19:06 bashrc_slink -> bashrc
+-rw-r--r--. 1 root root 176 Jun 11 19:09 bashrc_slink_1 <==与原始文件相同
+lrwxrwxrwx. 1 root root 6 Jun 11 19:10 bashrc_slink_2 -> bashrc <==是链接文件！
+# 这个例子也是很有趣喔！原本复制的是链接文件，但是却将链接文件的实际文件复制过来了
+# 也就是说，如果没有加上任何选项时，cp复制的是原始文件，而非链接文件的属性！
+# 若要复制链接文件的属性，就得要使用 -d 的选项了！如 bashrc_slink_2 所示。
+范例七：将主文件夹的 .bashrc 及 .bash_history 复制到 /tmp 下面
+[root@study tmp]# cp ~/.bashrc ~/.bash_history /tmp
+# 可以将多个数据一次复制到同一个目录去！最后面一定是目录！
+```
 
-  ```bash
-  [root@study ~]# mv [-fiu] source destination
-  [root@study ~]# mv [options] source1 source2 source3 .... directory
-  选项与参数：
-  -f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；
-  -i ：若目标文件 （destination） 已经存在时，就会询问是否覆盖！
-  -u ：若目标文件已经存在，且 source 比较新，才会更新 （update）
-  范例一：复制一文件，创建一目录，将文件移动到目录中
-  [root@study ~]# cd /tmp
-  [root@study tmp]# cp ~/.bashrc bashrc
-  [root@study tmp]# mkdir mvtest
-  [root@study tmp]# mv bashrc mvtest
-  # 将某个文件移动到某个目录去，就是这样做！
-  范例二：将刚刚的目录名称更名为 mvtest2
-  [root@study tmp]# mv mvtest mvtest2 <== 这样就更名了！简单～
-  # 其实在 Linux 下面还有个有趣的指令，名称为 rename ，
-  # 该指令专职进行多个文件名的同时更名，并非针对单一文件名变更，与mv不同。请man rename。
-  范例三：再创建两个文件，再全部移动到 /tmp/mvtest2 当中
-  [root@study tmp]# cp ~/.bashrc bashrc1
-  [root@study tmp]# cp ~/.bashrc bashrc2
-  [root@study tmp]# mv bashrc1 bashrc2 mvtest2
-  # 注意到这边，如果有多个来源文件或目录，则最后一个目标文件一定是“目录！”
-  # 意思是说，将所有的数据移动到该目录的意思！
-  ```
+- ##### rm：移除文件或目录
 
-  ##### basename和dirname的用途
 
-  ```bash
-  [root@study ~]# basename /etc/sysconfig/network
-  network <== 很简单！就取得最后的文件名～
-  [root@study ~]# dirname /etc/sysconfig/network
-  /etc/sysconfig <== 取得的变成目录名了！
-  ```
+```bash
+[root@study ~]# rm [-fir] 文件或目录
+选项与参数：
+-f ：就是 force 的意思，忽略不存在的文件，不会出现警告讯息；
+-i ：互动模式，在删除前会询问使用者是否动作
+-r ：递回删除啊！最常用在目录的删除了！这是非常危险的选项！！！
+范例一：将刚刚在 cp 的范例中创建的 bashrc 删除掉！
+[root@study ~]# cd /tmp
+[root@study tmp]# rm -i bashrc
+rm: remove regular file `bashrc'? y
+# 如果加上 -i 的选项就会主动询问喔，避免你删除到错误的文件名！
+范例二：通过万用字符*的帮忙，将/tmp下面开头为bashrc的文件名通通删除：
+[root@study tmp]# rm -i bashrc*
+# 注意那个星号，代表的是 0 到无穷多个任意字符喔！很好用的东西！
+范例三：将 cp 范例中所创建的 /tmp/etc/ 这个目录删除掉！
+[root@study tmp]# rmdir /tmp/etc
+rmdir: failed to remove '/tmp/etc': Directory not empty <== 删不掉啊！因为这不是空的目录！
+[root@study tmp]# rm -r /tmp/etc
+rm: descend into directory `/tmp/etc'? y
+rm: remove regular file `/tmp/etc/fstab'? y
+rm: remove regular empty file `/tmp/etc/crypttab'? ^C &lt;== 按下 [crtl]+c 中断
+.....（中间省略）.....
+# 因为身份是 root ，默认已经加入了 -i 的选项，所以你要一直按 y 才会删除！
+# 如果不想要继续按 y ，可以按下“ [ctrl]-c ”来结束 rm 的工作。
+# 这是一种保护的动作，如果确定要删除掉此目录而不要询问，可以这样做：
+[root@study tmp]# \rm -r /tmp/etc
+# 在指令前加上反斜线，可以忽略掉 alias 的指定选项喔！至于 alias 我们在bash再谈！
+# 拜托！这个范例很可怕！你不要删错了！删除 /etc 系统是会挂掉的！
+范例四：删除一个带有 - 开头的文件
+[root@study tmp]# touch ./-aaa- <==[touch](../Text/index.html#touch)这个指令可以创建空文件！
+[root@study tmp]# ls -l
+-rw-r--r--. 1 root root 0 Jun 11 19:22 -aaa- <==文件大小为0，所以是空文件
+[root@study tmp]# rm -aaarm: invalid option -- 'a' <== 因为 "-" 是选项嘛！所以系统误判了！
+Try 'rm ./-aaa-' to remove the file `-aaa-'. <== 新的 bash 有给建议的
+Try 'rm --help' for more information.
+[root@study tmp]# rm ./-aaa
+```
 
-  
+- ##### mv：移动文件与目录，或更名
 
-- #### 查阅一个文件的内容
+
+```bash
+[root@study ~]# mv [-fiu] source destination
+[root@study ~]# mv [options] source1 source2 source3 .... directory
+选项与参数：
+-f ：force 强制的意思，如果目标文件已经存在，不会询问而直接覆盖；
+-i ：若目标文件 （destination） 已经存在时，就会询问是否覆盖！
+-u ：若目标文件已经存在，且 source 比较新，才会更新 （update）
+范例一：复制一文件，创建一目录，将文件移动到目录中
+[root@study ~]# cd /tmp
+[root@study tmp]# cp ~/.bashrc bashrc
+[root@study tmp]# mkdir mvtest
+[root@study tmp]# mv bashrc mvtest
+# 将某个文件移动到某个目录去，就是这样做！
+范例二：将刚刚的目录名称更名为 mvtest2
+[root@study tmp]# mv mvtest mvtest2 <== 这样就更名了！简单～
+# 其实在 Linux 下面还有个有趣的指令，名称为 rename ，
+# 该指令专职进行多个文件名的同时更名，并非针对单一文件名变更，与mv不同。请man rename。
+范例三：再创建两个文件，再全部移动到 /tmp/mvtest2 当中
+[root@study tmp]# cp ~/.bashrc bashrc1
+[root@study tmp]# cp ~/.bashrc bashrc2
+[root@study tmp]# mv bashrc1 bashrc2 mvtest2
+# 注意到这边，如果有多个来源文件或目录，则最后一个目标文件一定是“目录！”
+# 意思是说，将所有的数据移动到该目录的意思！
+```
+
+- ##### basename和dirname的用途
+
+
+```bash
+[root@study ~]# basename /etc/sysconfig/network
+network <== 很简单！就取得最后的文件名～
+[root@study ~]# dirname /etc/sysconfig/network
+/etc/sysconfig <== 取得的变成目录名了！
+```
+
+
+
+#### 查阅一个文件的内容
 
 1. ​	cat 由第一行开始显示文件内容
 2. ​	tac 从最后一行开始显示，可以看出 tac 是 cat 的倒着写！ 
@@ -848,5 +859,406 @@ xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的
   # 例如 S 对应的记录数值为 123 ，转成十进制：1x8^2+2x8+3=83。
   ```
 
-  
+#### 修改文件时间或创建新文件：touch
+
+- modification time（mtime）：当该文件的“内容数据”变更时，就会更新这个时间！内容数据指的是文件的内容，而不是文件的属性或权限喔！
+
+
+- status time（ctime）：当该文件的“状态（status）”改变时，就会更新这个时间，举例来说，像是权限与属性被更改了，都会更新这个时间啊。
+
+
+- access time（atime）：当“该文件的内容被取用”时，就会更新这个读取时间（access）。举例来说，我们使用 cat 去读取/etc/man_db.conf ，就会更新该文件的 atime 了。
+
+```bash
+[root@study ~]# touch [-acdmt] 文件
+选项与参数：
+-a ：仅修订 access time；
+-c ：仅修改文件的时间，若该文件不存在则不创建新文件；
+-d ：后面可以接欲修订的日期而不用目前的日期，也可以使用 --date="日期或时间"
+-m ：仅修改 mtime ；
+-t ：后面可以接欲修订的时间而不用目前的时间，格式为[YYYYMMDDhhmm]
+范例一：新建一个空的文件并观察时间
+[dmtsai@study ~]# cd /tmp
+[dmtsai@study tmp]# touch testtouch
+[dmtsai@study tmp]# ls -l testtouch
+-rw-rw-r--. 1 dmtsai dmtsai 0 Jun 16 00:45 testtouch
+# 注意到，这个文件的大小是 0 呢！在默认的状态下，如果 touch 后面有接文件，
+# 则该文件的三个时间 （atime/ctime/mtime） 都会更新为目前的时间。若该文件不存在，
+# 则会主动的创建一个新的空的文件喔！例如上面这个例子！
+范例二：将 ~/.bashrc 复制成为 bashrc，假设复制完全的属性，检查其日期
+[dmtsai@study tmp]# cp -a ~/.bashrc bashrc
+[dmtsai@study tmp]# date; ll bashrc; ll --time=atime bashrc; ll --time=ctime bashrc
+Tue Jun 16 00:49:24 CST 2015 &lt;==这是目前的时间
+-rw-r--r--. 1 dmtsai dmtsai 231 Mar 6 06:06 bashrc &lt;==这是 mtime
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 15 23:44 bashrc &lt;==这是 atime
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 16 00:47 bashrc &lt;==这是 ctime
+范例三：修改案例二的 bashrc 文件，将日期调整为两天前
+[dmtsai@study tmp]# touch -d "2 days ago" bashrc
+[dmtsai@study tmp]# date; ll bashrc; ll --time=atime bashrc; ll --time=ctime bashrc
+Tue Jun 16 00:51:52 CST 2015
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 14 00:51 bashrc
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 14 00:51 bashrc
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 16 00:51 bashrc
+# 跟上个范例比较看看，本来是 16 日变成 14 日了 （atime/mtime）～不过， ctime 并没有跟着改变喔！
+范例四：将上个范例的 bashrc 日期改为 2014/06/15 2:02
+[dmtsai@study tmp]# touch -t 201406150202 bashrc
+[dmtsai@study tmp]# date; ll bashrc; ll --time=atime bashrc; ll --time=ctime bashrc
+Tue Jun 16 00:54:07 CST 2015
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 15 2014 bashrc
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 15 2014 bashrc
+-rw-r--r--. 1 dmtsai dmtsai 231 Jun 16 00:54 bashrc
+# 注意看看，日期在 atime 与 mtime 都改变了，但是 ctime 则是记录目前的时间！
+```
+
+#### umask 就是指定 “目前使用者在创建文件或目录时候的权限默认值”
+
+```bash
+[root@study ~]# umask
+0022 <==与一般权限有关的是后面三个数字！
+[root@study ~]# umask -S
+u=rwx,g=rx,o=rx
+[root@study ~]# umask 002	#在umask后面直接增加要修改的默认权限
+```
+
+​	若使用者创建为“文件”则默认“没有可执行（ x ）权限”，亦即只有 rw 这两个项目，也就是最大为 666 分，默认权限如下：-rw-rw-rw
+
+​	若使用者创建为“目录”，则由于 x 与是否可以进入此目录有关，因此默认为所有权限均开放，亦即为 777 分，默认权限如下：drwxrwxrwx
+
+​	如果以上面的例子来说明的话，因为 umask 为 022 ，所以 user 并没有被拿掉任何权限，不 过 group 与 others 的权限被拿掉了 2 （也就是 w 这个权限），那么当使用者：
+
+​	创建文件时：（-rw-rw-rw-） - （-----w--w-） ==> -rw-r--r-- 
+
+​	创建目录时：（drwxrwxrwx） - （d----w--w-） ==> drwxr-xr-x
+
+#### chattr（设置文件隐藏属性）
+
+```bash
+[root@study ~]# chattr [+-=][ASacdistu] 文件或目录名称
+选项与参数：
++ ：增加某一个特殊参数，其他原本存在参数则不动。
+- ：移除某一个特殊参数，其他原本存在参数则不动。
+= ：设置一定，且仅有后面接的参数
+A ：当设置了 A 这个属性时，若你有存取此文件（或目录）时，他的存取时间 atime 将不会被修改，
+可避免 I/O 较慢的机器过度的存取磁盘。（目前建议使用文件系统挂载参数处理这个项目）
+S ：一般文件是非同步写入磁盘的（原理请参考[前一章sync](../Text/index.html#sync)的说明），如果加上 S 这个属性时，当你进行任何文件的修改，该更动会“同步”写入磁盘中。
+a ：当设置 a 之后，这个文件将只能增加数据，而不能删除也不能修改数据，只有root 才能设置这属性
+c ：这个属性设置之后，将会自动的将此文件“压缩”，在读取的时候将会自动解压缩，
+但是在储存的时候，将会先进行压缩后再储存（看来对于大文件似乎蛮有用的！）
+d ：当 dump 程序被执行的时候，设置 d 属性将可使该文件（或目录）不会被 dump 备份
+i ：这个 i 可就很厉害了！他可以让一个文件“不能被删除、改名、设置链接也无法写入或新增数据！”
+对于系统安全性有相当大的助益！只有 root 能设置此属性
+s ：当文件设置了 s 属性时，如果这个文件被删除，他将会被完全的移除出这个硬盘空间，
+所以如果误删了，完全无法救回来了喔！
+u ：与 s 相反的，当使用 u 来设置文件时，如果该文件被删除了，则数据内容其实还存在磁盘中，
+可以使用来救援该文件喔！
+注意1：属性设置常见的是 a 与 i 的设置值，而且很多设置值必须要身为 root 才能设置
+注意2：xfs 文件系统仅支持 AadiS 而已
+范例：请尝试到/tmp下面创建文件，并加入 i 的参数，尝试删除看看。
+[root@study ~]# cd /tmp
+[root@study tmp]# touch attrtest &lt;==创建一个空文件
+[root@study tmp]# chattr +i attrtest &lt;==给予 i 的属性
+[root@study tmp]# rm attrtest &lt;==尝试删除看看
+rm: remove regular empty file `attrtest'? y
+rm: cannot remove `attrtest': Operation not permitted
+# 看到了吗？呼呼！连 root 也没有办法将这个文件删除呢！赶紧解除设置！
+范例：请将该文件的 i 属性取消！
+[root@study tmp]# chattr -i attrtest
+```
+
+#### lsattr（显示文件隐藏属性）
+
+```bash
+[root@study ~]# lsattr [-adR] 文件或目录
+选项与参数：
+-a ：将隐藏文件的属性也秀出来；
+-d ：如果接的是目录，仅列出目录本身的属性而非目录内的文件名；
+-R ：连同子目录的数据也一并列出来！
+[root@study tmp]# chattr +aiS attrtest
+[root@study tmp]# lsattr attrtest
+--S-ia---------- attrtest
+```
+
+#### Set UID（SUID）
+
+- SUID 权限仅对二进制程序（binary program）有效；
+
+- 执行者对于该程序需要具有 x 的可执行权限；
+
+- 本权限仅在执行该程序的过程中有效 （run-time）；
+
+- 执行者将具有该程序拥有者 （owner） 的权限。
+
+#### Set GID（SGID）
+
+如果是对文件来说， SGID 有如下的功能：
+
+- SGID 对二进制程序有用；
+
+- 程序执行者对于该程序来说，需具备 x 的权限；
+
+- 执行者在执行的过程中将会获得该程序群组的支持！
+
+当一个目录设置了 SGID 的权限后，他将具有如下的功能：
+
+- 使用者若对于此目录具有 r 与 x 的权限时，该使用者能够进入此目录；
+
+- 使用者在此目录下的有效群组（effective group）将会变成该目录的群组；
+
+- 用途：若使用者在此目录下具有 w 的权限（可以新建文件），则使用者所创建的新文件，该新文件的群组与此目录的群组相同。
+
+#### Sticky Bit（SBIT）
+
+这个Sticky Bit,SBIT目前只针对目录有效，对于文件已经没有效果了。SBIT对于目录的作用是：
+
+当使用者对于此目录具有 w, x 权限，亦即具有写入的权限时；
+
+当使用者在该目录下创建文件或目录时，仅有自己与 root 才有权力删除该文件
+
+#### SUID/SGID/SBIT 权限设置
+
+```bash
+[root@study ~]# cd /tmp
+[root@study tmp]# touch test &lt;==创建一个测试用空档
+[root@study tmp]# chmod 4755 test; ls -l test &lt;==加入具有 SUID 的权限
+-rwsr-xr-x 1 root root 0 Jun 16 02:53 test
+[root@study tmp]# chmod 6755 test; ls -l test &lt;==加入具有 SUID/SGID 的权限
+-rwsr-sr-x 1 root root 0 Jun 16 02:53 test
+[root@study tmp]# chmod 1755 test; ls -l test &lt;==加入 SBIT 的功能！
+-rwxr-xr-t 1 root root 0 Jun 16 02:53 test
+[root@study tmp]# chmod 7666 test; ls -l test &lt;==具有空的 SUID/SGID 权限
+-rwSrwSrwT 1 root root 0 Jun 16 02:53 test
+
+# 设置权限成为 -rws--x--x 的模样：
+[root@study tmp]# chmod u=rwxs,go=x test; ls -l test
+-rws--x--x 1 root root 0 Jun 16 02:53 test
+# 承上，加上 SGID 与 SBIT 在上述的文件权限中！
+[root@study tmp]# chmod g+s,o+t test; ls -l test
+-rws--s--t 1 root root 0 Jun 16 02:53 test
+```
+
+#### 查找文件的命令
+
+- ##### file：观察文件类型
+
+```bash
+[root@study ~]# file ~/.bashrc
+/root/.bashrc: ASCII text &lt;==告诉我们是 ASCII 的纯文本文件啊！
+[root@study ~]# file /usr/bin/passwd
+/usr/bin/passwd: setuid ELF 64-bit LSB shared object, x86-64, version 1 （SYSV）, dynamically
+linked （uses shared libs）, for GNU/Linux 2.6.32,
+BuildID[sha1]=0xbf35571e607e317bf107b9bcf65199988d0ed5ab, stripped
+# 可执行文件的数据可就多的不得了！包括这个文件的 suid 权限、相容于 Intel x86-64 等级的硬件平台
+# 使用的是 Linux 核心 2.6.32 的动态函数库链接等等。
+[root@study ~]# file /var/lib/mlocate/mlocate.db
+/var/lib/mlocate/mlocate.db: data &lt;== 这是 data 文件！
+```
+
+- ##### which：寻找“可执行文件”
+
+```bash
+[root@study ~]# which [-a] command
+选项或参数：
+-a ：将所有由 PATH 目录中可以找到的指令均列出，而不止第一个被找到的指令名称
+范例一：搜寻 ifconfig 这个指令的完整文件名
+[root@study ~]# which ifconfig
+/sbin/ifconfig
+范例二：用 which 去找出 which 的文件名为何？
+[root@study ~]# which which
+alias which='alias &#124; /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+/bin/alias
+/usr/bin/which
+# 竟然会有两个 which ，其中一个是 alias 这玩意儿呢！那是啥？
+# 那就是所谓的“命令别名”，意思是输入 which 会等于后面接的那串指令啦！
+# 更多的数据我们会在 bash 章节中再来谈的！
+范例三：请找出 history 这个指令的完整文件名
+[root@study ~]# which history
+/usr/bin/which: no history in （/usr/local/sbin:/usr/local/bin:/sbin:/bin:
+/usr/sbin:/usr/bin:/root/bin）
+[root@study ~]# history --help
+-bash: history: --: invalid option
+history: usage: history [-c] [-d offset] [n] or history -anrw [filename] or history -ps arg
+# 瞎密？怎么可能没有 history ，我明明就能够用 root 执行 history 的啊！
+```
+
+- ##### whereis：由一些特定的目录中寻找文件文件名
+
+```bash
+[root@study ~]# whereis [-bmsu] 文件或目录名
+选项与参数：
+-l :可以列出 whereis 会去查询的几个主要目录而已
+-b :只找 binary 格式的文件
+-m :只找在说明文档 manual 路径下的文件
+-s :只找 source 来源文件
+-u :搜寻不在上述三个项目当中的其他特殊文件
+范例一：请找出 ifconfig 这个文件名
+[root@study ~]# whereis ifconfig
+ifconfig: /sbin/ifconfig /usr/share/man/man8/ifconfig.8.gz
+范例二：只找出跟 passwd 有关的“说明文档”文件名（man page）
+[root@study ~]# whereis passwd # 全部的文件名通通列出来！
+passwd: /usr/bin/passwd /etc/passwd /usr/share/man/man1/passwd.1.gz /usr/share/man/man5/passwd.5.gz
+[root@study ~]# whereis -m passwd # 只有在 man 里面的文件名才抓出来！
+passwd: /usr/share/man/man1/passwd.1.gz /usr/share/man/man5/passwd.5.gz
+
+```
+
+- ##### locate/updatedb
+
+```bash
+[root@study ~]# locate [-ir] keyword
+选项与参数：
+-i ：忽略大小写的差异；
+-c ：不输出文件名，仅计算找到的文件数量
+-l ：仅输出几行的意思，例如输出五行则是 -l 5
+-S ：输出 locate 所使用的数据库文件的相关信息，包括该数据库纪录的文件/目录数量等
+-r ：后面可接正则表达式的显示方式
+范例一：找出系统中所有与 passwd 相关的文件名，且只列出 5 个
+[root@study ~]# locate -l 5 passwd
+/etc/passwd
+/etc/passwd-
+/etc/pam.d/passwd
+/etc/security/opasswd
+/usr/bin/gpasswd
+范例二：列出 locate 查询所使用的数据库文件之文件名与各数据数量
+[root@study ~]# locate -S
+Database /var/lib/mlocate/mlocate.db:
+8,086 directories # 总纪录目录数
+109,605 files # 总纪录文件数
+5,190,295 Bytes in file names
+2,349,150 Bytes used to store database
+```
+
+- updatedb：根据 /etc/updatedb.conf 的设置去搜寻系统硬盘内的文件名，并更新 /var/lib/mlocate 内的数据库文件；
+- locate：依据 /var/lib/mlocate 内的数据库记载，找出使用者输入的关键字文件名。
+
+- ##### find
+
+```bash
+[root@study ~]# find [PATH] [option] [action]
+选项与参数：
+1\. 与时间有关的选项：共有 -atime, -ctime 与 -mtime ，以 -mtime 说明
+-mtime n ：n 为数字，意义为在 n 天之前的“一天之内”被更动过内容的文件；
+-mtime +n ：列出在 n 天之前（不含 n 天本身）被更动过内容的文件文件名；
+-mtime -n ：列出在 n 天之内（含 n 天本身）被更动过内容的文件文件名。
+-newer file ：file 为一个存在的文件，列出比 file 还要新的文件文件名
+范例一：将过去系统上面 24 小时内有更动过内容 （mtime） 的文件列出
+[root@study ~]# find / -mtime 0
+# 那个 0 是重点！0 代表目前的时间，所以，从现在开始到 24 小时前，
+# 有变动过内容的文件都会被列出来！那如果是三天前的 24 小时内？
+# find / -mtime 3 有变动过的文件都被列出的意思！
+范例二：寻找 /etc 下面的文件，如果文件日期比 /etc/passwd 新就列出
+[root@study ~]# find /etc -newer /etc/passwd
+# -newer 用在分辨两个文件之间的新旧关系是很有用的！
+```
+
+![image-20210814205405469](C:\Users\rxee\AppData\Roaming\Typora\typora-user-images\image-20210814205405469.png)
+
++4代表大于等于5天前的文件名：ex> find /var -mtime +4
+
+-4代表小于等于4天内的文件文件名：ex> find /var -mtime -4
+
+4则是代表4-5那一天的文件文件名：ex> find /var -mtime 4
+
+```bash
+选项与参数：
+2\. 与使用者或群组名称有关的参数：
+-uid n ：n 为数字，这个数字是使用者的帐号 ID，亦即 UID ，这个 UID 是记录在
+/etc/passwd 里面与帐号名称对应的数字。这方面我们会在第四篇介绍。
+-gid n ：n 为数字，这个数字是群组名称的 ID，亦即 GID，这个 GID 记录在
+/etc/group，相关的介绍我们会第四篇说明～
+-user name ：name 为使用者帐号名称喔！例如 dmtsai
+-group name：name 为群组名称喔，例如 users ；
+-nouser ：寻找文件的拥有者不存在 /etc/passwd 的人！
+-nogroup ：寻找文件的拥有群组不存在于 /etc/group 的文件！
+当你自行安装软件时，很可能该软件的属性当中并没有文件拥有者，
+这是可能的！在这个时候，就可以使用 -nouser 与 -nogroup 搜寻。
+范例三：搜寻 /home 下面属于 dmtsai 的文件
+[root@study ~]# find /home -user dmtsai
+# 这个东西也很有用的～当我们要找出任何一个使用者在系统当中的所有文件时，
+# 就可以利用这个指令将属于某个使用者的所有文件都找出来喔！
+范例四：搜寻系统中不属于任何人的文件
+[root@study ~]# find / -nouser
+# 通过这个指令，可以轻易的就找出那些不太正常的文件。如果有找到不属于系统任何人的文件时，
+# 不要太紧张，那有时候是正常的～尤其是你曾经以源代码自行编译软件时。
+```
+
+```bash
+选项与参数：
+3\. 与文件权限及名称有关的参数：
+-name filename：搜寻文件名称为 filename 的文件；
+-size [+-]SIZE：搜寻比 SIZE 还要大（+）或小（-）的文件。这个 SIZE 的规格有：
+c: 代表 Byte， k: 代表 1024Bytes。所以，要找比 50KB
+还要大的文件，就是“ -size +50k ”
+-type TYPE ：搜寻文件的类型为 TYPE 的，类型主要有：一般正规文件 （f）, 设备文件 （b, c）,
+目录 （d）, 链接文件 （l）, socket （s）, 及 FIFO （p） 等属性。
+-perm mode ：搜寻文件权限“刚好等于” mode 的文件，这个 mode 为类似 chmod
+的属性值，举例来说， -rwsr-xr-x 的属性为 4755 ！
+-perm -mode ：搜寻文件权限“必须要全部囊括 mode 的权限”的文件，举例来说，
+我们要搜寻 -rwxr--r-- ，亦即 0744 的文件，使用 -perm -0744，
+当一个文件的权限为 -rwsr-xr-x ，亦即 4755 时，也会被列出来，
+因为 -rwsr-xr-x 的属性已经囊括了 -rwxr--r-- 的属性了。
+-perm /mode ：搜寻文件权限“包含任一 mode 的权限”的文件，举例来说，我们搜寻
+-rwxr-xr-x ，亦即 -perm /755 时，但一个文件属性为 -rw-------
+也会被列出来，因为他有 -rw.... 的属性存在！
+范例五：找出文件名为 passwd 这个文件
+[root@study ~]# find / -name passwd
+范例五-1：找出文件名包含了 passwd 这个关键字的文件
+[root@study ~]# find / -name "*passwd*"
+# 利用这个 -name 可以搜寻文件名啊！默认是完整文件名，如果想要找关键字，
+# 可以使用类似 * 的任意字符来处理
+范例六：找出 /run 目录下，文件类型为 Socket 的文件名有哪些？
+[root@study ~]# find /run -type s
+# 这个 -type 的属性也很有帮助喔！尤其是要找出那些怪异的文件，
+# 例如 socket 与 FIFO 文件，可以用 find /run -type p 或 -type s 来找！
+范例七：搜寻文件当中含有 SGID 或 SUID 或 SBIT 的属性
+[root@study ~]# find / -perm /7000
+# 所谓的 7000 就是 ---s--s--t ，那么只要含有 s 或 t 的就列出，所以当然要使用 /7000，
+# 使用 -7000 表示要同时含有 ---s--s--t 的所有三个权限。而只需要任意一个，就是 /7000 ～瞭乎？
+```
+
+```bash
+选项与参数：
+4\. 额外可进行的动作：
+-exec command ：command 为其他指令，-exec 后面可再接额外的指令来处理搜寻到的结果。
+-print ：将结果打印到屏幕上，这个动作是默认动作！
+范例八：将上个范例找到的文件使用 ls -l 列出来～
+[root@study ~]# find /usr/bin /usr/sbin -perm /7000 -exec ls -l {} \;
+# 注意到，那个 -exec 后面的 ls -l 就是额外的指令，指令不支持命令别名，
+# 所以仅能使用 ls -l 不可以使用 ll 喔！注意注意！
+范例九：找出系统中，大于 1MB 的文件
+[root@study ~]# find / -size +1M
+```
+
+#### 极重要的复习！权限与指令间的关系
+
+一、让使用者能进入某目录成为“可工作目录”的基本权限为何： 
+
+- 可使用的指令：例如 cd 等变换工作目录的指令；
+- 目录所需权限：使用者对这个目录至少需要具有 x 的权限；
+- 额外需求：如果使用者想要在这个目录内利用 ls 查阅文件名，则使用者对此目录还需要 r 的权限。
+
+二、使用者在某个目录内读取一个文件的基本权限为何？ 
+
+- 可使用的指令：例如本章谈到的 cat, more, less等等；
+
+- 目录所需权限：使用者对这个目录至少需要具有 x 权限；
+
+- 文件所需权限：使用者对文件至少需要具有 r 的权限才行！
+
+三、让使用者可以修改一个文件的基本权限为何？
+
+- 可使用的指令：例如 nano 或未来要介绍的 vi 编辑器等；
+
+- 目录所需权限：使用者在该文件所在的目录至少要有 x 权限；
+
+- 文件所需权限：使用者对该文件至少要有 r, w 权限。
+
+四、让一个使用者可以创建一个文件的基本权限为何？
+
+- 目录所需权限：使用者在该目录要具有 w,x 的权限，重点在 w 啦！
+
+五、让使用者进入某目录并执行该目录下的某个指令之基本权限为何？
+
+- 目录所需权限：使用者在该目录至少要有 x 的权限；
+
+- 文件所需权限：使用者在该文件至少需要有 x 的权限。
 
