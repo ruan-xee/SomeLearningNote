@@ -1262,3 +1262,85 @@ c: 代表 Byte， k: 代表 1024Bytes。所以，要找比 50KB
 
 - 文件所需权限：使用者在该文件至少需要有 x 的权限。
 
+# 7.Linux磁盘与文件系统管理
+
+#### Ext2文件系统的限制：
+
+- 原则上，block 的大小与数量在格式化完就不能够再改变了（除非重新格式化）；
+
+- 每个 block 内最多只能够放置一个文件的数据；
+
+- 承上，如果文件大于 block 的大小，则一个文件会占用多个 block 数量；
+
+- 承上，若文件小于 block ，则该 block 的剩余容量就不能够再被使用了（磁盘空间会浪费）。
+
+#### inode记录的文件数据至少有以下：
+
+- 该文件的存取模式（read/write/excute）；
+
+- 该文件的拥有者与群组（owner/group）；
+
+- 该文件的容量；
+
+- 该文件创建或状态改变的时间（ctime）；
+
+- 最近一次的读取时间（atime）；
+
+- 最近修改的时间（mtime）；
+
+- 定义文件特性的旗标（flag），如 SetUID...；
+
+- 该文件真正内容的指向（pointer）；
+
+#### inode 的数量与大小也是在格式化时就已经固定了，除此之外 inode 还有些什么特色呢？
+
+- 每个 inode 大小均固定为 128 Bytes （新的 ext4 与 xfs 可设置到 256 Bytes）；
+
+- 每个文件都仅会占用一个 inode 而已；
+
+- 承上，因此文件系统能够创建的文件数量与 inode 的数量有关；
+
+- 系统读取文件时需要先找到 inode，并分析 inode 所记录的权限与使用者是否符合，若符合才能够开始实际读取 block 的内容。
+
+#### Superblock（超级区块）
+
+Superblock 是记录整个 filesystem 相关信息的地方， 没有 Superblock ，就没有这个 filesystem 了。他记录的信息主要有：
+
+- block 与 inode 的总量；
+
+- 未使用与已使用的 inode / block 数量；
+
+- block 与 inode 的大小 （block 为 1, 2, 4K，inode 为 128Bytes 或 256Bytes）；
+
+- filesystem 的挂载时间、最近一次写入数据的时间、最近一次检验磁盘 （fsck） 的时间 等文件系统的相关信息；
+
+- 一个 valid bit 数值，若此文件系统已被挂载，则 valid bit 为 0 ，若未被挂载，则 valid bit 为 1 。
+
+#### Filesystem Description（文件系统描述说明）
+
+这个区段可以描述每个 block group 的开始与结束的 block 号码，以及说明每个区段（superblock, bitmap, inodemap, data block）分别介于哪一个 block 号码之间。这部份也能够用 dumpe2fs 来观察的。
+
+#### block bitmap（区块对照表）
+
+从 block bitmap 当中可以知道哪些 block 是空的，因此我们的系统就能够很快速的找到可使用的空间来处置文件啰。同样的，如果你删除某些文件时，那么那些文件原本占用的 block 号码就得要释放出来，此时在 block bitmap 当中相对应到该 block 号码的标志就得要修改成为“未使用中”啰！这就是 bitmap 的功能。 
+
+#### inode bitmap（inode对照表）
+
+inode bitmap 记录使用与未使用的 inode 号码。
+
+#### block group 的内容我们单纯看 Group0 信息好了： 
+
+- Group0 所占用的 block 号码由 0 到 32767 号，superblock 则在第 0 号的 block 区块内！
+
+- 文件系统描述说明在第 1 号 block 中；
+
+- block bitmap 与 inode bitmap 则在 129 及 145 的 block 号码上。
+
+- 至于 inode table 分布于 161-672 的 block 号码中！
+
+- 由于 （1）一个 inode 占用 256 Bytes ，（2）总共有 672 - 161 + 1（161本身） = 512 个 block 花在 inode table 上， （3）每个 block 的大小为 4096 Bytes（4K）。由这些数据可以算出 inode 的数量共有 512 * 4096 / 256 = 8192 个 inode 啦！
+
+- 这个 Group0 目前可用的 block 有 28521 个，可用的 inode 有 8181 个；
+
+- 剩余的 inode 号码为 12 号到 8192 号
+
