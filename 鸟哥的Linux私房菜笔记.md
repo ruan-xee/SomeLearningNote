@@ -1595,3 +1595,156 @@ lrwxrwxrwx. 1 root root 6 Jun 23 22:40 passwd-so -&gt; passwd
 # 其实文件名的部分就会有特殊的颜色显示喔！
 ```
 
+#### 如果我们想要在系统里面新增一颗磁盘时，应该有哪些动作需要做的呢：
+
+1. 对磁盘进行分区，以创建可用的 partition；
+2. 对该 partition 进行格式化（format），以创建系统可用的 filesystem；
+3. 若想要仔细一点，则可对刚刚创建好的 filesystem 进行检验；
+4. 在 Linux 系统上，需要创建挂载点（亦即是目录），并将他挂载上来；
+
+#### lsblk 列出系统上的所有磁盘列表
+
+```bash
+[root@study ~]# lsblk [-dfimpt] [device]
+选项与参数：
+-d ：仅列出磁盘本身，并不会列出该磁盘的分区数据
+-f ：同时列出该磁盘内的文件系统名称
+-i ：使用 ASCII 的线段输出，不要使用复杂的编码 （再某些环境下很有用）
+-m ：同时输出该设备在 /dev 下面的权限数据 （rwx 的数据）
+-p ：列出该设备的完整文件名！而不是仅列出最后的名字而已。
+-t ：列出该磁盘设备的详细数据，包括磁盘伫列机制、预读写的数据量大小等
+范例一：列出本系统下的所有磁盘与磁盘内的分区信息
+[root@RuanXee dutest]# lsblk
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda               8:0    0   40G  0 disk 
+├─sda1            8:1    0    2M  0 part 
+├─sda2            8:2    0    1G  0 part /boot
+└─sda3            8:3    0   30G  0 part 
+  ├─centos-root 253:0    0   10G  0 lvm  /
+  ├─centos-swap 253:1    0    1G  0 lvm  [SWAP]
+  └─centos-home 253:2    0    5G  0 lvm  /home
+sr0              11:0    1  7.1G  0 rom  /run/media/rxee/CentOS 7 x86_64
+
+范例二：仅列出 /dev/vda 设备内的所有数据的完整文件名
+[root@RuanXee dutest]# lsblk -ip /dev/sda
+NAME                        MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+/dev/sda                      8:0    0  40G  0 disk 
+|-/dev/sda1                   8:1    0   2M  0 part 
+|-/dev/sda2                   8:2    0   1G  0 part /boot
+`-/dev/sda3                   8:3    0  30G  0 part 
+  |-/dev/mapper/centos-root 253:0    0  10G  0 lvm  /
+  |-/dev/mapper/centos-swap 253:1    0   1G  0 lvm  [SWAP]
+  `-/dev/mapper/centos-home 253:2    0   5G  0 lvm  /home
+```
+
+- NAME：就是设备的文件名啰！会省略 /dev 等前导目录！
+
+- MAJ:MIN：其实核心认识的设备都是通过这两个代码来熟悉的！分别是主要：次要设备代码！
+
+- RM：是否为可卸载设备 （removable device），如光盘、USB 磁盘等等
+
+- SIZE：当然就是容量啰！
+
+- RO：是否为只读设备的意思
+
+- TYPE：是磁盘 （disk）、分区 （partition） 还是只读存储器 （rom） 等输出
+
+- MOUTPOINT：就是前一章谈到的挂载点！
+
+#### blkid列出设备的 UUID 等参数
+
+```bash
+[root@RuanXee dutest]# blkid
+/dev/sda2: UUID="be8d7b40-9c2d-4407-962e-481f07e80042" TYPE="xfs" PARTUUID="572bd508-ee81-42f6-97bc-adf3714fe697" 
+/dev/sda3: UUID="xd5Ts1-CHVk-3l0u-WlaZ-BPbA-noUk-yfK5uW" TYPE="LVM2_member" PARTUUID="89c404f0-53c5-4002-b4ac-b4b73e785d1e" 
+/dev/sr0: UUID="2015-04-01-00-21-36-00" LABEL="CentOS 7 x86_64" TYPE="iso9660" PTTYPE="dos" 
+/dev/mapper/centos-root: UUID="fed8e7fc-ee16-4531-bc71-6a8f0ba71337" TYPE="xfs" 
+/dev/mapper/centos-swap: UUID="9028e759-f0a3-4f34-84d8-2c0f54d28508" TYPE="swap" 
+/dev/mapper/centos-home: UUID="2fc5a97d-611d-4315-a126-3e2732a96968" TYPE="xfs" 
+```
+
+UUID 是全域单一识别码 （universally unique identifier），Linux 会将系统内所有的设备都给予一个独一无二的识别码， 这个识别码就可以拿来作为挂载或者是使用这个设备/文件系统之用了。
+
+#### parted 列出磁盘的分区表类型与分区信息
+
+```bash
+[root@study ~]# parted device_name print
+范例一：列出 /dev/vda 磁盘的相关数据
+[root@study ~]# parted /dev/vda print
+Model: Virtio Block Device （virtblk） # 磁盘的模块名称（厂商）
+Disk /dev/vda: 42.9GB # 磁盘的总容量
+Sector size （logical/physical）: 512B/512B # 磁盘的每个逻辑/物理扇区容量
+Partition Table: gpt # 分区表的格式 （MBR/GPT）
+Disk Flags: pmbr_boot
+Number Start End Size File system Name Flags # 下面才是分区数据
+1 1049kB 3146kB 2097kB bios_grub
+2 3146kB 1077MB 1074MB xfs
+3 1077MB 33.3GB 32.2GB lvm
+```
+
+#### 磁盘分区： gdisk
+
+```bash
+[root@study ~]# gdisk 设备名称
+范例：由前一小节的 lsblk 输出，我们知道系统有个 /dev/vda，请观察该磁盘的分区与相关数据
+[root@study ~]# gdisk /dev/vda &lt;==仔细看，不要加上数字喔！
+GPT fdisk （gdisk） version 0.8.6
+Partition table scan:
+MBR: protective
+BSD: not present
+APM: not present
+GPT: present
+Found valid GPT with protective MBR; using GPT. &lt;==找到了 GPT 的分区表！
+Command （? for help）: &lt;==这里可以让你输入指令动作，可以按问号 （?） 来查看可用指令
+Command （? for help）: ?
+b back up GPT data to a file
+c change a partition's name
+d delete a partition # 删除一个分区
+i show detailed information on a partition
+l list known partition types
+n add a new partition # 增加一个分区
+o create a new empty GUID partition table （GPT）
+p print the partition table # 印出分区表 （常用）
+q quit without saving changes # 不储存分区就直接离开 gdisk
+r recovery and transformation options （experts only）
+s sort partitions
+t change a partition's type code
+v verify disk
+w write table to disk and exit # 储存分区操作后离开 gdisk
+x extra functionality （experts only）
+? print this menu
+Command （? for help）:
+
+Command （? for help）: p &lt;== 这里可以输出目前磁盘的状态
+Disk /dev/vda: 83886080 sectors, 40.0 GiB # 磁盘文件名/扇区数与总容量
+Logical sector size: 512 Bytes # 单一扇区大小为 512 Bytes
+Disk identifier （GUID）: A4C3C813-62AF-4BFE-BAC9-112EBD87A483 # 磁盘的 GPT 识别码
+Partition table holds up to 128 entries
+First usable sector is 34, last usable sector is 83886046
+Partitions will be aligned on 2048-sector boundaries
+Total free space is 18862013 sectors （9.0 GiB）
+Number Start （sector） End （sector） Size Code Name # 下面为完整的分区信息了！
+1 2048 6143 2.0 MiB EF02 # 第一个分区数据
+2 6144 2103295 1024.0 MiB 0700
+3 2103296 65026047 30.0 GiB 8E00
+# 分区编号 开始扇区号码 结束扇区号码 容量大小
+Command （? for help）: q
+# 想要不储存离开吗？按下 q 就对了！不要随便按 w 啊！
+```
+
+每个项目的意义为： 
+
+Number：分区编号，1号指的是 /dev/vda1 这样计算。
+
+Start （sector）：每一个分区的开始扇区号码位置。
+
+End （sector）：每一个分区的结束扇区号码位置，与 start 之间可以算出分区的总容量。
+
+Size：就是分区的容量了。
+
+Code：在分区内的可能的文件系统类型。Linux 为 8300，swap 为 8200。不过这个项目只是一个提示而已，不见得真的代表此分区内的文件系统喔！
+
+Name：文件系统的名称等等。
+
+要注意的是：“MBR 分区表请使用 fdisk 分区， GPT 分区表请使用 gdisk 分区！” 这个不要搞错～否则会分区失败的！
+
