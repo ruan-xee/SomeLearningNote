@@ -1999,8 +1999,8 @@ Creating journal （8192 blocks）: done
 Writing superblocks and filesystem accounting information: done
 [root@study ~]# dumpe2fs -h /dev/vda5
 dumpe2fs 1.42.9 （28-Dec-2013）
-Filesystem volume name: &lt;none&gt;
-Last mounted on: &lt;not available&gt;
+Filesystem volume name: <none&gt;
+Last mounted on: <not available&gt;
 Filesystem UUID: 3fd5cc6f-a47d-46c0-98c0-d43b072e0e12
 ....（中间省略）....
 Inode count: 65536
@@ -2078,7 +2078,7 @@ Blocks per group: 32768
 e2fsck 1.42.9 （28-Dec-2013）
 /dev/vda5 was not cleanly unmounted, check forced.
 Pass 1: Checking inodes, blocks, and sizes
-Deleted inode 1577 has zero dtime. Fix&lt;y&gt;? yes
+Deleted inode 1577 has zero dtime. Fix<y&gt;? yes
 Pass 2: Checking directory structure
 Pass 3: Checking directory connectivity
 Pass 4: Checking reference counts
@@ -2251,11 +2251,11 @@ Filesystem 1K-blocks Used Available Use% Mounted on
 # 先找一下已经挂载的文件系统，如上所示，特殊字体即为刚刚挂载的设备啰！
 # 基本上，卸载后面接设备或挂载点都可以！不过最后一个 centos-root 由于有其他挂载，
 # 因此，该项目一定要使用挂载点来卸载才行！
-[root@study ~]# umount /dev/vda4 &lt;==用设备文件名来卸载
-[root@study ~]# umount /data/ext4 &lt;==用挂载点来卸载
-[root@study ~]# umount /data/cdrom &lt;==因为挂载点比较好记忆！
+[root@study ~]# umount /dev/vda4 <==用设备文件名来卸载
+[root@study ~]# umount /data/ext4 <==用挂载点来卸载
+[root@study ~]# umount /data/cdrom <==因为挂载点比较好记忆！
 [root@study ~]# umount /data/usb
-[root@study ~]# umount /data/var &lt;==一定要用挂载点！因为设备有被其他方式挂载
+[root@study ~]# umount /data/var <==一定要用挂载点！因为设备有被其他方式挂载
 ```
 
 如果你遇到这样的情况：
@@ -2273,7 +2273,7 @@ the device is found by lsof（8） or fuser（1））
 
 也就是说其实“你正在使用该文件系统”的意思！所以自然无法卸载这个设备！就“离开该文件系统的挂载点”即可。以上述的案例来说，你可以使用“cd /”回到根目录，就能够卸载 /data/cdrom 啰！
 
-#### mknod
+#### mknod：创建设备文件
 
 ```bash
 [root@study ~]# mknod 设备文件名 [bcp] [Major] [Minor]
@@ -2340,7 +2340,7 @@ new UUID = e0fa7252-b374-4a06-987a-3cb14f415488
 范例：列出 /dev/vda5 的 label name 之后，将它改成 vbird_ext4
 [root@study ~]# dumpe2fs -h /dev/vda5 &#124; grep name
 dumpe2fs 1.42.9 （28-Dec-2013）
-Filesystem volume name: &lt;none&gt; # 果然是没有设置的！
+Filesystem volume name: <none&gt; # 果然是没有设置的！
 [root@study ~]# tune2fs -L vbird_ext4 /dev/vda5
 [root@study ~]# dumpe2fs -h /dev/vda5 &#124; grep name
 Filesystem volume name: vbird_ext4
@@ -2421,5 +2421,56 @@ Filesystem 1K-blocks Used Available Use% Mounted on
 
 ```bash
 [root@study ~]# mount -n -o remount,rw /
+```
+
+#### 创建大文件来实现伪分区效果
+
+##### 1、创建大文件
+
+```bash
+[root@study ~]# dd if=/dev/zero of=/srv/loopdev bs=1M count=512
+512+0 records in <==读入 512 笔数据
+512+0 records out <==输出 512 笔数据
+536870912 Bytes （537 MB） copied, 12.3484 seconds, 43.5 MB/s
+# 这个指令的简单意义如下：
+# if 是 input file ，输入文件。那个 /dev/zero 是会一直输出 0 的设备！
+# of 是 output file ，将一堆零写入到后面接的文件中。
+# bs 是每个 block 大小，就像文件系统那样的 block 意义；
+# count 则是总共几个 bs 的意思。所以 bs*count 就是这个文件的容量了！
+[root@study ~]# ll -h /srv/loopdev
+-rw-r--r--. 1 root root 512M Jun 25 19:46 /srv/loopdev
+```
+
+##### 2、大型文件的格式化
+
+默认 xfs 不能够格式化文件的，所以要格式化文件得要加入特别的参数才行喔！让我们来瞧瞧！
+
+```bash
+[root@study ~]# mkfs.xfs -f /srv/loopdev
+[root@study ~]# blkid /srv/loopdev
+/srv/loopdev: UUID="7dd97bd2-4446-48fd-9d23-a8b03ffdd5ee" TYPE="xfs"
+```
+
+##### 3、挂载
+
+```bash
+[root@study ~]# mount -o loop UUID="7dd97bd2-4446-48fd-9d23-a8b03ffdd5ee" /mnt
+[root@study ~]# df /mnt
+Filesystem 1K-blocks Used Available Use% Mounted on
+/dev/loop0 520876 26372 494504 6% /mnt
+```
+
+```bash
+#开机自动挂载
+[root@study ~]# nano /etc/fstab
+/srv/loopdev /data/file xfs defaults 0 0
+# 毕竟系统大多仅查询 block device 去找出 UUID 而已，因此使用文件创建的 filesystem，
+# 最好还是使用原本的文件名来处理，应该比较不容易出现错误讯息的！
+[root@study ~]# umount /mnt
+[root@study ~]# mkdir /data/file
+[root@study ~]# mount -a
+[root@study ~]# df /data/file
+Filesystem 1K-blocks Used Available Use% Mounted on
+/dev/loop0 520876 26372 494504 6% /data/file
 ```
 
